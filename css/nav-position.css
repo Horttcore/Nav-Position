@@ -1,0 +1,28 @@
+.nav-position-viewport {
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+
+.nav-position-background {
+	background: url('../images/nav-position-background.png') left top;
+	height: 104px;
+	width: 100%;
+}
+
+.nav-position-title{
+	background: #333;
+	color: #fff;
+	cursor: move;
+	display: inline-block;
+	letter-spacing: 2px;
+	padding: 5px;
+	position: absolute;
+	transition: all .3s;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.nav-position-title:hover{
+	background:#ffc100;
+	color: #333;
+}
