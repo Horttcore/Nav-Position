@@ -99,8 +99,7 @@ class Nav_Position
 	{
 		wp_enqueue_script( 'nav-position' );
 		$nav_position = get_post_meta( $post->ID, '_nav-position', TRUE );
-		if ( defined( 'Nav_Position_Image' ) AND defined( 'Nav_Position_Image_Width' ) AND defined( 'Nav_Position_Image_Height' ) )
-			$style = 'style="' . apply_filters( 'nav-position-style', 'background-image:url(' . Nav_Position_Image . '); width: ' . Nav_Position_Image_Width . '; height: ' . Nav_Position_Image_Height . '"' );
+		$style = ( defined( 'Nav_Position_Image' ) AND defined( 'Nav_Position_Image_Width' ) AND defined( 'Nav_Position_Image_Height' ) ) ? 'style="' . apply_filters( 'nav-position-style', 'background-image:url(' . Nav_Position_Image . '); width: ' . Nav_Position_Image_Width . '; height: ' . Nav_Position_Image_Height . '"' ) : '';
 		?>
 		<div class="nav-position-viewport">
 
@@ -113,6 +112,18 @@ class Nav_Position
 			</div>
 
 		</div>
+
+		<p>
+			<span class="alignright nav-position-info">
+				<?php
+				if ( '' != $nav_position ) :
+					echo $nav_position['left'] . ':' . $nav_position['top'];
+				endif;
+				?>
+			</span>
+			<a class="button delete-position" href="#"><?php _e( 'Delete position', 'nav-position' ); ?></a>
+		</p>
+
 		<?php
 	}
 
@@ -129,9 +140,18 @@ class Nav_Position
 	{
 		if ( $_POST['post_id'] && $_POST['left'] && $_POST['top'] ) :
 
-			update_post_meta( $_POST['post_id'], '_nav-position', array( 'left' => $_POST['left'], 'top' => $_POST['top'] ) );
+			if ( 'false' == $_POST['left'] && 'false' == $_POST['top'] ) :
 
-			die( $_POST['left'] . ':' . $_POST['top']);
+				delete_post_meta( intval( $_POST['post_id'] ), '_nav-position' );
+				die( 'Deleted' );
+
+			else :
+
+				update_post_meta( intval( $_POST['post_id'] ), '_nav-position', array( 'left' => sanitze_text_field( $_POST['left'] ), 'top' => sanitize_text_field( $_POST['top'] ) ) );
+				die( $_POST['left'] . ':' . $_POST['top']);
+
+			endif;
+
 
 		else :
 
